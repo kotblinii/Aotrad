@@ -1,0 +1,192 @@
+:root {
+  --overlay-bg-color: rgba(9, 9, 11, 0.0); /* Padrao 0.0 para nao ter caixa preta fixa */
+  --border-edit: #38bdf8; /* Azul ciano para diferenciar da area de captura verde */
+  --text-primary: #ffffff;
+  --text-secondary: #e4e4e7;
+  --text-muted: #a1a1aa;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent !important;
+  font-family: var(--font-sans);
+  user-select: none;
+}
+
+.overlay-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--overlay-bg-color);
+  border-radius: 6px;
+  border: 1px solid transparent;
+  transition: opacity 250ms ease-out, background-color 200ms ease, border-color 150ms;
+  position: relative;
+  opacity: 0; /* Invisivel por padrao ate surgir o primeiro dialogo ou entrar em modo edicao */
+}
+
+/* Visivel quando há dialogo ativo ou em modo de edicao */
+.overlay-container.visible {
+  opacity: 1;
+}
+
+/* Modo Edicao (Ativado via Alt+Z) */
+.overlay-container.edit-mode {
+  opacity: 1 !important;
+  background-color: rgba(9, 9, 11, 0.85) !important;
+  border: 2px dashed var(--border-edit) !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+.edit-header {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: #18181b;
+  border-bottom: 1px solid #27272a;
+  -webkit-app-region: drag; /* Permite arrastar o HUD livremente */
+}
+
+.overlay-container.edit-mode .edit-header {
+  display: flex;
+}
+
+.edit-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #7dd3fc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+}
+
+.edit-btn {
+  background: #27272a;
+  border: 1px solid #3f3f46;
+  color: #f4f4f5;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 100ms;
+}
+
+.edit-btn:hover {
+  background: #3f3f46;
+}
+
+.edit-btn.active {
+  background: #38bdf8;
+  border-color: #38bdf8;
+  color: #000000;
+  font-weight: 700;
+}
+
+/* Area de Exibicao da Legenda */
+.subtitle-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 24px;
+  text-align: center;
+  -webkit-app-region: no-drag;
+}
+
+.overlay-container.edit-mode .subtitle-content {
+  -webkit-app-region: drag; /* Permite arrastar clicando em qualquer lugar do HUD no modo edicao */
+  cursor: move;
+}
+
+/* Alinhamento do Texto */
+.align-left .subtitle-content {
+  align-items: flex-start;
+  text-align: left;
+}
+.align-center .subtitle-content {
+  align-items: center;
+  text-align: center;
+}
+.align-right .subtitle-content {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.subtitle-pt {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  /* Contorno preto profundo para leitura excelente mesmo sem caixa de fundo */
+  text-shadow:
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000,
+     0px  3px 8px rgba(0, 0, 0, 0.95);
+}
+
+.subtitle-en {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  text-shadow:
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     0px  2px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* Escalas de Tamanho de Fonte */
+.size-small .subtitle-pt { font-size: 19px; }
+.size-small .subtitle-en { font-size: 11px; }
+
+.size-medium .subtitle-pt { font-size: 25px; }
+.size-medium .subtitle-en { font-size: 13px; }
+
+.size-large .subtitle-pt { font-size: 33px; }
+.size-large .subtitle-en { font-size: 16px; }
+
+/* Rodape em Modo Edicao */
+.edit-footer {
+  display: none;
+  padding: 6px 14px;
+  background: #121214;
+  border-top: 1px solid #27272a;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #a1a1aa;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overlay-container.edit-mode .edit-footer {
+  display: flex;
+}

@@ -1,0 +1,7 @@
+node_modules/
+eng.traineddata
+src/config/history.json
+src/config/settings.json
+*.log
+.DS_Store
+Thumbs.db

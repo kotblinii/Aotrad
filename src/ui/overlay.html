@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aotrad - Overlay</title>
+  <link rel="stylesheet" href="overlay.css">
+</head>
+<body>
+  <div class="overlay-container size-medium" id="overlay-container">
+    <!-- Cabeçalho visível no Modo Edição (Alt+Z) -->
+    <div class="edit-header" id="edit-header">
+      <div class="edit-title">
+        <span>SOBREPOSIÇÃO HUD</span>
+        <span style="color: #71717a;">[ARRASTE PARA POSICIONAR]</span>
+      </div>
+      <div class="edit-controls">
+        <span style="font-family: var(--font-mono); font-size: 11px; color: #a1a1aa;">FUNDO:</span>
+        <button class="edit-btn" id="btn-op-0">0%</button>
+        <button class="edit-btn" id="btn-op-50">50%</button>
+        <button class="edit-btn" id="btn-op-85">85%</button>
+
+        <span style="font-family: var(--font-mono); font-size: 11px; color: #a1a1aa; margin-left: 6px;">FONTE:</span>
+        <button class="edit-btn" id="btn-size-p">P</button>
+        <button class="edit-btn active" id="btn-size-m">M</button>
+        <button class="edit-btn" id="btn-size-g">G</button>
+
+        <span style="font-family: var(--font-mono); font-size: 11px; color: #a1a1aa; margin-left: 6px;">ALINH.:</span>
+        <button class="edit-btn" id="btn-align-left" title="Alinhar à esquerda">Esq</button>
+        <button class="edit-btn active" id="btn-align-center" title="Centralizar">Cen</button>
+        <button class="edit-btn" id="btn-align-right" title="Alinhar à direita">Dir</button>
+
+        <button class="edit-btn" id="btn-close-edit" style="margin-left: 6px;">Concluir [Alt+Z]</button>
+      </div>
+    </div>
+
+    <!-- Conteúdo da Legenda em Tempo Real -->
+    <div class="subtitle-content" id="subtitle-content">
+      <div class="subtitle-pt" id="overlay-pt"></div>
+      <div class="subtitle-en" id="overlay-en"></div>
+    </div>
+
+    <!-- Rodapé informativo durante Edição -->
+    <div class="edit-footer" id="edit-footer">
+      <span>Arraste ou redimensione. Ao terminar, pressione Alt+Z para fixar</span>
+      <span id="hotkey-indicator">[Alt+Z: Fixar] | [Alt+B: Fundo] | [Alt+X: Ocultar]</span>
+    </div>
+  </div>
+
+  <script src="overlay.js"></script>
+</body>
+</html>

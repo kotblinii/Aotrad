@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aotrad - Configurar Áreas na Tela</title>
+  <link rel="stylesheet" href="calibrate.css">
+</head>
+<body>
+  <img id="bg-snapshot" class="bg-snapshot" alt="" />
+
+  <!-- Barra de Controle Unificada no Topo -->
+  <div class="top-toolbar" id="top-toolbar">
+    <div class="toolbar-row">
+      <div class="legend-pills">
+        <span class="pill pill-green">1. Área de Captura (Lê o jogo)</span>
+        <span class="pill pill-cyan">2. Área da Tradução (Mostra o texto)</span>
+      </div>
+      <div class="toolbar-actions">
+        <button class="btn-tool" id="btn-bring-capture" title="Mover a caixa verde para este monitor">Trazer Captura</button>
+        <button class="btn-tool" id="btn-bring-hud" title="Mover a caixa azul para este monitor">Trazer Tradução</button>
+        <span class="divider"></span>
+        <span class="tool-label">Fundo:</span>
+        <button class="btn-tool" id="btn-cal-op-0">0%</button>
+        <button class="btn-tool" id="btn-cal-op-50">50%</button>
+        <button class="btn-tool" id="btn-cal-op-85">85%</button>
+        <span class="divider"></span>
+        <button class="btn-confirm" id="btn-confirm">Salvar Áreas [Enter]</button>
+        <button class="btn-tool" id="btn-cancel">Cancelar [Esc]</button>
+      </div>
+    </div>
+    <div class="toolbar-sub">
+      <span>Arraste qualquer caixa para mover ou puxe pelos cantos para redimensionar. Clique fora para desenhar uma nova área de captura.</span>
+      <span class="overlap-warning" id="overlap-warning">Aviso: As duas caixas estão sobrepostas. Deixe a Tradução acima da Captura.</span>
+    </div>
+  </div>
+
+  <!-- Caixa 1: Área de Captura (Verde) -->
+  <div class="editor-box capture-box" id="capture-box">
+    <div class="box-badge badge-green" id="capture-badge">1. LER LEGENDA DO JOGO (0 x 0)</div>
+    <div class="box-hint">Posicione exatamente em cima das legendas em inglês</div>
+    <div class="resize-handle handle-green nw" data-box="capture" data-dir="nw"></div>
+    <div class="resize-handle handle-green ne" data-box="capture" data-dir="ne"></div>
+    <div class="resize-handle handle-green sw" data-box="capture" data-dir="sw"></div>
+    <div class="resize-handle handle-green se" data-box="capture" data-dir="se"></div>
+  </div>
+
+  <!-- Caixa 2: Área da Tradução / HUD (Azul Ciano) -->
+  <div class="editor-box hud-box" id="hud-box">
+    <div class="box-badge badge-cyan" id="hud-badge">2. MOSTRAR TRADUÇÃO AQUI (0 x 0)</div>
+    <div class="hud-preview-text" id="hud-preview-pt">Exemplo: Niko, vamos jogar boliche!</div>
+    <div class="hud-preview-sub">Niko, let's go bowling!</div>
+    <div class="resize-handle handle-cyan nw" data-box="hud" data-dir="nw"></div>
+    <div class="resize-handle handle-cyan ne" data-box="hud" data-dir="ne"></div>
+    <div class="resize-handle handle-cyan sw" data-box="hud" data-dir="sw"></div>
+    <div class="resize-handle handle-cyan se" data-box="hud" data-dir="se"></div>
+  </div>
+
+  <script src="calibrate.js"></script>
+</body>
+</html>

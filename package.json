@@ -1,0 +1,26 @@
+{
+  "name": "aotrad",
+  "version": "1.0.0",
+  "description": "Tradutor de Legendas em Tempo Real para Jogos (Overlay e Segundo Monitor)",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node test_engine.js"
+  },
+  "keywords": [
+    "game-translator",
+    "overlay",
+    "ocr",
+    "real-time",
+    "subtitles",
+    "pt-br"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^39.2.7",
+    "pngjs": "^7.0.0",
+    "screenshot-desktop": "^1.15.1",
+    "tesseract.js": "^7.0.0"
+  }
+}

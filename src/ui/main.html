@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aotrad - Tradutor de Legendas em Tempo Real</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="brand-title">AOTRAD</div>
+      <div class="brand-badge">HUD & COMPANION</div>
+      <div class="status-pill">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-text">AGUARDANDO</span>
+      </div>
+    </div>
+    <div class="controls">
+      <button id="btn-toggle-capture" class="primary">Iniciar Captura [Alt+S]</button>
+      <button id="btn-open-areas-header">Configurar Áreas na Tela [Alt+A]</button>
+      <button id="btn-toggle-overlay">Exibir HUD [Alt+X]</button>
+      <button id="btn-toggle-drawer" title="Abrir ou recolher a gaveta lateral">Ocultar Painel</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Painel Principal de Conteúdo -->
+    <div class="content-pane">
+      <!-- Seção de Legenda Ativa -->
+      <section class="active-dialogue-section">
+        <div class="section-label">
+          <span>Diálogo em Foco (Tempo Real)</span>
+          <span id="active-timestamp" style="font-family: var(--font-mono); font-size: 11px;">--:--:--</span>
+        </div>
+        <div class="live-translation-card">
+          <div class="live-pt" id="live-pt">Aguardando legendas do jogo...</div>
+          <div class="live-en" id="live-en">[Nenhum texto em inglês capturado no momento]</div>
+        </div>
+      </section>
+
+      <!-- Histórico de Diálogos -->
+      <section class="history-section">
+        <div class="history-toolbar">
+          <input type="text" id="search-input" class="search-input" placeholder="Buscar no histórico de diálogos...">
+          <button id="btn-export">Exportar</button>
+          <button id="btn-clear" class="danger">Limpar</button>
+        </div>
+        <div class="history-list" id="history-list">
+          <!-- Diálogos injetados via JavaScript -->
+        </div>
+      </section>
+    </div>
+
+    <!-- Barra Lateral de Monitoramento & Ajuste -->
+    <aside class="sidebar">
+      <div class="sidebar-block">
+        <div class="section-label">
+          <span>1. Áreas na Tela (Captura)</span>
+          <span id="perf-stats" style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);"></span>
+        </div>
+        <div class="roi-preview-box" id="roi-preview-box">
+          <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">Prévia da captura aparecerá aqui</span>
+        </div>
+
+        <button id="btn-calibrate-sidebar" class="primary" style="width: 100%; margin-top: 4px;">
+          Configurar Áreas na Tela (Verde + Azul)
+        </button>
+
+        <div style="display: flex; gap: 6px;">
+          <button id="btn-toggle-guide-sidebar" style="flex: 1; font-size: 12px;">
+            Guia no Jogo [Alt+C]
+          </button>
+          <button id="btn-toggle-edit-mode" style="flex: 1; font-size: 12px;">
+            Mover HUD [Alt+Z]
+          </button>
+        </div>
+
+        <div class="form-group" style="margin-top: 4px;">
+          <label for="profile-select">Perfis de Jogos / Telas Salvos</label>
+          <div style="display: flex; gap: 6px;">
+            <select id="profile-select" style="flex: 1;">
+              <option value="">-- Selecione um perfil --</option>
+            </select>
+            <button id="btn-delete-profile" class="danger" style="padding: 6px 10px; font-size: 12px;" title="Excluir perfil selecionado">Excluir</button>
+          </div>
+          <div style="display: flex; gap: 6px; margin-top: 2px;">
+            <input type="text" id="profile-name-input" placeholder="Nome (ex: GTA 4, YouTube)" style="flex: 1; min-width: 0;">
+            <button id="btn-save-profile" class="primary" style="font-size: 12px; white-space: nowrap;">Salvar Perfil</button>
+          </div>
+        </div>
+
+        <details class="advanced-details">
+          <summary>Ajuste Manual & Predefinições</summary>
+          <div class="details-body">
+            <div class="form-group">
+              <label>Coordenadas da Captura (Pixels)</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                <div>
+                  <span style="font-size: 11px; color: var(--text-muted);">X:</span>
+                  <input type="number" id="roi-input-x" value="360" style="width: 100%;">
+                </div>
+                <div>
+                  <span style="font-size: 11px; color: var(--text-muted);">Y:</span>
+                  <input type="number" id="roi-input-y" value="820" style="width: 100%;">
+                </div>
+                <div>
+                  <span style="font-size: 11px; color: var(--text-muted);">Largura:</span>
+                  <input type="number" id="roi-input-w" value="1200" style="width: 100%;">
+                </div>
+                <div>
+                  <span style="font-size: 11px; color: var(--text-muted);">Altura:</span>
+                  <input type="number" id="roi-input-h" value="180" style="width: 100%;">
+                </div>
+              </div>
+              <button id="btn-apply-manual-roi" style="margin-top: 6px;">Aplicar Coordenadas</button>
+            </div>
+
+            <div class="form-group">
+              <label>Predefinições Rápidas</label>
+              <div style="display: flex; flex-direction: column; gap: 4px;">
+                <button id="preset-gta4">GTA 4 / Padrão 1080p</button>
+                <button id="preset-1440p">Padrão 1440p (2K)</button>
+                <button id="preset-compact">Legenda Compacta</button>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Configurações de Fundo e Transparência -->
+      <div class="sidebar-block">
+        <div class="section-label">2. Aparência da Tradução</div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label for="opacity-range">Fundo Preto do HUD</label>
+            <span id="opacity-val-label" style="font-family: var(--font-mono); font-size: 11px; color: #86efac;">0% (Sem Caixa)</span>
+          </div>
+          <input type="range" id="opacity-range" min="0" max="100" step="5" value="0" style="width: 100%; cursor: pointer;">
+          <div style="display: flex; gap: 6px; margin-top: 4px;">
+            <button id="btn-set-op-0" style="flex: 1; font-size: 11px;">0%</button>
+            <button id="btn-set-op-50" style="flex: 1; font-size: 11px;">50%</button>
+            <button id="btn-set-op-85" style="flex: 1; font-size: 11px;">85%</button>
+            <button id="btn-toggle-bg" style="flex: 1; font-size: 11px;">Alternar [Alt+B]</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 4px;">
+          <label>Alinhamento do Diálogo</label>
+          <div style="display: flex; gap: 6px;">
+            <button id="btn-main-align-left" style="flex: 1; font-size: 12px;">Esquerda</button>
+            <button id="btn-main-align-center" class="primary active" style="flex: 1; font-size: 12px;">Centro</button>
+            <button id="btn-main-align-right" style="flex: 1; font-size: 12px;">Direita</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 4px;">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="chk-auto-hide" checked>
+            <span>Ocultar quando ninguém estiver falando</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Motor de Tradução e Atalhos -->
+      <div class="sidebar-block">
+        <div class="section-label">3. Tradutor & Atalhos</div>
+
+        <div class="form-group">
+          <label for="engine-select">Serviço de Tradução</label>
+          <select id="engine-select">
+            <option value="google">Google Translate (Gratuito)</option>
+            <option value="deepl">DeepL API</option>
+            <option value="gemini">Gemini API</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="api-key-group" style="display: none;">
+          <label for="api-key-input">Chave de API</label>
+          <input type="text" id="api-key-input" placeholder="Cole aqui a chave do serviço">
+        </div>
+
+        <details class="advanced-details">
+          <summary>Atalhos & Velocidade</summary>
+          <div class="details-body">
+            <div class="form-group">
+              <label for="interval-select">Intervalo de Captura</label>
+              <select id="interval-select">
+                <option value="80">80ms (Ultra Rápido)</option>
+                <option value="120" selected>120ms (Recomendado)</option>
+                <option value="250">250ms (Equilibrado)</option>
+                <option value="500">500ms (Leve)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="hotkey-capture-input">Iniciar / Pausar Captura</label>
+              <input type="text" id="hotkey-capture-input" value="Alt+S">
+            </div>
+            <div class="form-group">
+              <label for="hotkey-calibrate-input">Configurar Áreas na Tela</label>
+              <input type="text" id="hotkey-calibrate-input" value="Alt+A">
+            </div>
+            <div class="form-group">
+              <label for="hotkey-edit-input">Mover HUD</label>
+              <input type="text" id="hotkey-edit-input" value="Alt+Z">
+            </div>
+            <div class="form-group">
+              <label for="hotkey-toggle-input">Mostrar / Ocultar HUD</label>
+              <input type="text" id="hotkey-toggle-input" value="Alt+X">
+            </div>
+            <div class="form-group">
+              <label for="hotkey-guide-input">Mostrar / Ocultar Guia</label>
+              <input type="text" id="hotkey-guide-input" value="Alt+C">
+            </div>
+            <div class="form-group">
+              <label for="hotkey-bg-input">Alternar Fundo Preto</label>
+              <input type="text" id="hotkey-bg-input" value="Alt+B">
+            </div>
+            <button id="btn-save-settings" class="primary" style="margin-top: 4px;">Salvar Atalhos</button>
+          </div>
+        </details>
+      </div>
+    </aside>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
